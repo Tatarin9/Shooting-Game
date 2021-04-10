@@ -1,27 +1,50 @@
-alert('To Start the Game Please Push the Botton!');
-
 let life = 10;  //
 let lastLoopRun = 0; 
 let score = 0; 
 let iterations = 0; 
 let enemies = new Array(); 
-let lasers = new Array(); 
+// let lasers = new Array(); 
 let enemy;
-startBtnHandler();  //
-// shootingHandler();
 
+const startBtn = document.getElementById('start-button');  //!!!
 
-function startBtnHandler () {  //
-    const startBtn = document.getElementById('start-button');  //!!!
-    startBtn.addEventListener('click', loop);
+startBtn.addEventListener('click', loop);  //!!!
+
+function clickHandler() {
+    const shootingArea = document.getElementById('shooting-area');
+    shootingArea.addEventListener('click', getX_pos);
 }
 
-// function shootingHandler () {
-//     const shootingArea = new MouseEvent (
-//         'click', 
-//         getFireableLaser()
-//     );
-// }
+clickHandler(); 
+
+function getX_pos (event) {
+        shooting(event.clientX);
+}
+
+function shooting (x_coord) {
+    const shootingArea = document.getElementById('shooting-area');
+    const shoot = document.createElement('div');
+    shootingArea.appendChild(shoot);
+    shoot.className = "laser";
+    shoot.style.left = x_coord+ 'px';
+    shoot.style.bottom = 180+ 'px';
+    laserUp(shoot);
+    if (shoot.style.bottom > 700)  {
+        laserUp() = false;
+    } 
+}  
+
+function laserUp (shoot) {
+    const bottom = shoot.style.bottom;
+    let bottomNum = parseInt(bottom.substring(0, bottom.length - 2));
+    for (let i = 1; i<2; i++) {
+        setInterval (() => {
+           bottomNum = bottomNum + 5 ;
+           shoot.style.bottom = bottomNum + 'px';
+        }, 100);
+    } 
+    
+}
 
 function createSprite(element, x, y, w, h) { 
     let result = new Object(); 
@@ -58,25 +81,25 @@ function setPosition(sprite) {
     e.style.top = sprite.y + 'px'; 
 }  
 
-function getFireableLaser() { 
-    let result = null; 
-    for (let i = 0; i < lasers.length; i++) { 
-        if (lasers[i].y <= -120) { 
-            result = lasers[i]; 
-        } 
-    } return result; 
-} 
+// function getFireableLaser() { 
+//     let result = null; 
+//     for (let i = 0; i < lasers.length; i++) { 
+//         if (lasers[i].y <= -120) { 
+//             result = lasers[i]; 
+//         } 
+//     } return result; 
+// } 
 
-function getIntersectingLaser(enemy) { 
-    let result = null; 
-    for (let i = 0; i < lasers.length; i++) { 
-        if (intersects(lasers[i], enemy)) { 
-            result = lasers[i]; 
-            break; 
-        } 
-    } 
-    return result; 
-} 
+// function getIntersectingLaser(enemy) { 
+//     let result = null; 
+//     for (let i = 0; i < lasers.length; i++) { 
+//         if (intersects(lasers[i], enemy)) { 
+//             result = lasers[i]; 
+//             break; 
+//         } 
+//     } 
+//     return result; 
+// } 
 
 function gameOver() { 
     element = document.getElementById('gameover'); 
@@ -87,15 +110,16 @@ function gameOver() {
 
 function checkCollisions() { 
     for (let i = 0; i < enemies.length; i++) { 
-        let laser = getIntersectingLaser(enemies[i]); 
-        if (laser) { 
-            let element = document.getElementById(enemies[i].element); 
-            element.style.visibility = 'hidden'; 
-            element.parentNode.removeChild(element); 
-            enemies.splice(i, 1); 
-            i--; 
-            laser.y = -laser.h; score += 100; 
-        } else if (enemies[i].y + enemies[i].h >= 610) {  //
+    //     let laser = getIntersectingLaser(enemies[i]); 
+    //     if (laser) { 
+    //         let element = document.getElementById(enemies[i].element); 
+    //         element.style.visibility = 'hidden'; 
+    //         element.parentNode.removeChild(element); 
+    //         enemies.splice(i, 1); 
+    //         i--; 
+    //         laser.y = -laser.h; score += 100; 
+        // } 
+     if (enemies[i].y + enemies[i].h >= 610) {  //
             let element = document.getElementById(enemies[i].element); 
             element.style.visibility = 'hidden'; 
             element.parentNode.removeChild(element); 
@@ -116,15 +140,15 @@ function showSprites() { //
     lifeSet.innerHTML = 'REST OF LIVES: ' + life;   //!!!
 } 
 
-function updatePositions() { 
-    for (let i = 0; i < enemies.length; i++) { 
-        enemies[i].y += 4; 
-        enemies[i].x += getRandom(7) - 3; 
-        ensureBounds(enemies[i], true); 
-    } for (let i = 0; i < lasers.length; i++) { 
-        lasers[i].y -= 12; 
-    } 
-} 
+// function updatePositions() { 
+//     for (let i = 0; i < enemies.length; i++) { 
+//         enemies[i].y += 4; 
+//         enemies[i].x += getRandom(7) - 3; 
+//         ensureBounds(enemies[i], true); 
+//     } for (let i = 0; i < lasers.length; i++) { 
+//         lasers[i].y -= 12; 
+//     } 
+// } 
 function addEnemy() { 
     let interval = 50; 
     if (iterations > 1500) { 
@@ -153,14 +177,14 @@ function getRandom(maxSize) {
 } 
 
 function loop() { 
-    if (new Date().getTime() - lastLoopRun > 40) { 
-        updatePositions(); 
+    // if (new Date().getTime() - lastLoopRun > 40) { 
+        // updatePositions(); 
         checkCollisions(); 
         addEnemy(); 
         showSprites(); 
         lastLoopRun = new Date().getTime(); 
         iterations++; 
-    } 
+    // } 
     setTimeout('loop();', 2); 
     let element = 'enemy'; //
     if (element.y = 620) {
@@ -168,10 +192,3 @@ function loop() {
     }    
 } 
 
-for (let i = 0; i < 3; i++) { 
-    lasers[i] = createSprite (
-    'laser' + i,  0, -120, 2, 50
-    ); 
-} 
-
-// loop();
