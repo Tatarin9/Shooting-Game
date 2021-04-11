@@ -1,16 +1,14 @@
-// function startGame() {
-//     const startBtn = document.getElementById('start-button');  //!!!
-//     startBtn.addEventListener('click', addEnemy);
-// }
+function startGame() {
+    const startBtn = document.getElementById('start-button');  
+    startBtn.addEventListener('click', addEnemy);
+}
 
-// startGame();
+startGame();
 
 function clickHandler() {
     const shootingArea = document.getElementById('shooting-area');
     shootingArea.addEventListener('click', getX_pos);
 }
-
-clickHandler(); 
 
 function getX_pos (event) {
     shooting(event.clientX);        
@@ -29,27 +27,29 @@ function shooting (x_coord) {
 function laserUp (shoot) {
     const bottom = shoot.style.bottom;
     let bottomNum = parseInt(bottom.substring(0, bottom.length - 2));
-    for (let i = 1; i<2; i++) {
-        setInterval (() => {
-           bottomNum = bottomNum + 5 ;
-           shoot.style.bottom = bottomNum + 'px';
-        }, 30);
-    }  
-    // if (shoot.style.bottom == 700)  {
-    //     return; 
-    // }   
-}
+        for (let i = 1; i<2; i++) {
+            setInterval (() => {
+                if (shoot.style.bottom < 720 + 'px') {
+               bottomNum = bottomNum + 5 ;
+               shoot.style.bottom = bottomNum + 'px';
+                } else {
+                    shoot.style.display = "none";
+                    return;
+                }
+            }, 30);
+        }    
+} 
 
 function addEnemy() {
+    clickHandler();
     setInterval(() => {
         const playBoard = document.getElementById('play-board');
-    const enemy = document.createElement('div');
-    playBoard.appendChild(enemy);
-    enemy.className = 'enemy';
-    enemy.style.left = parseInt((Math.random() * 1450)) + 'px';   
-    enemy.style.top = 0 + 'px'; 
-    enemyDown(enemy);   
-
+        const enemy = document.createElement('div');
+        playBoard.appendChild(enemy);
+        enemy.className = 'enemy';
+        enemy.style.left = parseInt((Math.random() * 1450)) + 'px';   
+        enemy.style.top = 0 + 'px'; 
+        enemyDown(enemy);   
     }, 2000);
        
 }
@@ -59,11 +59,15 @@ function enemyDown(enemy) {
     let roofNum = parseInt(roof.substring(0, roof.length - 2));
     for (let i=1; i<20; i++) {
         setInterval (() => {
-            roofNum = roofNum + 2;
-            enemy.style.top = roofNum + 'px';
-        }, 2000); 
-    }      
-}
+                roofNum = roofNum + 2;
+                enemy.style.top = roofNum + 'px';          
+        }, 2000);                    
+    }
+    // if (enemy.style.top > 352 + 'px') {
+    //     enemy.style.display = 'none';
+    //     return;
+    // }        
+}             
 
 // function addEnemy () {
 //     const playBoard = document.getElementById('play-board');
@@ -86,5 +90,5 @@ function enemyDown(enemy) {
 //         }, 500);
 //     }        
 // }  
-addEnemy();
+// addEnemy();
 
