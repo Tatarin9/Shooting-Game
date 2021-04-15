@@ -101,12 +101,12 @@ function setPosition(sprite) {
 //     return result; 
 // } 
 
-function gameOver() { 
-    element = document.getElementById('gameover'); 
-    element.style.visibility = 'visible'; 
-    addEnemy = false;  //
+// function gameOver() { 
+//     element = document.getElementById('gameover'); 
+//     element.style.visibility = 'visible'; 
+//     addEnemy = false;  //
     
-} 
+// } 
 
 function checkCollisions() { 
     for (let i = 0; i < enemies.length; i++) { 
